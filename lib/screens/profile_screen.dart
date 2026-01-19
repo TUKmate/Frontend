@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import '../controllers/auth_controller.dart';
 import '../models/post.dart';
 import '../services/api_service.dart';
+import 'my_posts_screen.dart';
+import 'profile_edit_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -42,7 +44,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final user = _authController.user.value;
-    if (user == null) return const SizedBox(); // 유저 정보 없으면 빈 화면
+    // ✅ 개발 단계용 더미 유저
+    final displayUsername = user?.username ?? "홍길동";
+    
+    //if (user == null) return const SizedBox(); // 유저 정보 없으면 빈 화면
 
     // 색상 정의
     const Color primaryColor = Color(0xFF1758A8);
@@ -122,7 +127,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              user.username,
+                              displayUsername,
+                              //user.username,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 30,
@@ -151,6 +157,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               label: "프로필 수정",
                               secondaryColor: secondaryColor,
                               backgroundColor: backgroundColor,
+                              onTap: () => const ProfileEditScreen(),
                             ),
                           ),
                           const SizedBox(width: 16),
@@ -160,6 +167,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               label: "내가 쓴 글 관리",
                               secondaryColor: secondaryColor,
                               backgroundColor: backgroundColor,
+                              onTap: () => const MyPostsScreen(),
                             ),
                           ),
                         ],
@@ -208,25 +216,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             // 정보 그리드
                             Column(
                               children: [
-                                // Row 1: 학과 + 학년
+                                // Row 1: 학과
                                 Row(
                                   children: [
                                     Expanded(
                                       flex: 65,
                                       child: _buildInfoBox(
                                         label: "학과",
-                                        value: "컴퓨터공학과",
-                                        secondaryColor: secondaryColor,
-                                        backgroundColor: backgroundColor,
-                                        textMainColor: textMainColor,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      flex: 35,
-                                      child: _buildInfoBox(
-                                        label: "학년",
-                                        value: "3학년",
+                                        value: user.major,
                                         secondaryColor: secondaryColor,
                                         backgroundColor: backgroundColor,
                                         textMainColor: textMainColor,
@@ -239,7 +236,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 // Row 2: 기숙사 (Full Width)
                                 _buildInfoBox(
                                   label: "기숙사",
-                                  value: "제 2기숙사",
+                                  value: user.dormitory,
                                   secondaryColor: secondaryColor,
                                   backgroundColor: backgroundColor,
                                   textMainColor: textMainColor,
@@ -253,7 +250,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     Expanded(
                                       child: _buildInfoBox(
                                         label: "성별",
-                                        value: "남성",
+                                        value: user.gender,
                                         secondaryColor: secondaryColor,
                                         backgroundColor: backgroundColor,
                                         textMainColor: textMainColor,
@@ -263,7 +260,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     Expanded(
                                       child: _buildInfoBox(
                                         label: "나이",
-                                        value: "23세",
+                                        value: "${user.age}세",
                                         secondaryColor: secondaryColor,
                                         backgroundColor: backgroundColor,
                                         textMainColor: textMainColor,
@@ -341,6 +338,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required String label,
     required Color secondaryColor,
     required Color backgroundColor,
+    required VoidCallback onTap,
   }) {
     return Container(
       height: 128,
@@ -358,7 +356,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {},
+          onTap: onTap,
           borderRadius: BorderRadius.circular(32),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

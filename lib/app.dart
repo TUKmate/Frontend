@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
 
       initialRoute: '/post',
 
+
       getPages: [
         GetPage(name: '/', page: () => const SplashScreen()),
         GetPage(name: '/login', page: () => const LoginScreen()),
