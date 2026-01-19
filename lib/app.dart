@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       title: 'TUKmate',
       debugShowCheckedModeBanner: false,
       theme: _buildTheme(),
-      initialRoute: '/login',
+      initialRoute: '/compose',
       getPages: [
         GetPage(name: '/', page: () => const SplashScreen()),
         GetPage(name: '/login', page: () => const LoginScreen()),

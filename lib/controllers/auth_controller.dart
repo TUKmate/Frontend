@@ -53,19 +53,24 @@ class AuthController extends GetxController {
     error.value = ''; // 에러 초기화
 
     try {
+      print('DEBUG login: username=$username, password=$password');
       final userDate = await _api.login(username: username, password: password);
+
+      print('DEBUG login: userDate=$userDate');
 
       isLoading.value = false; // 로딩 끝
 
       if (userDate != null) {
         // JSON -> User 객체로 변환해서 저장
         user.value = User.fromJson(userDate);
+        print('DEBUG login: user set, isLoggedIn=$isLoggedIn');
         return true; // 성공
       } else {
         error.value = '이메일 또는 비밀번호가 올바르지 않습니다';
         return false;
       }
     } catch (e) {
+      print('DEBUG login: exception=$e');
       isLoading.value = false;
       error.value = '네트워크 오류';
       return false;

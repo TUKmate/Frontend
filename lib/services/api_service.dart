@@ -96,8 +96,60 @@ class ApiService extends GetConnect {
   }
 
   // 게시글 작성
-  Future<Response> createPost(String content, String? imagePath) async {
-    return await post('/posts', {'content': content, 'image': imagePath});
+  Future<Response> createPost({
+    required String title,
+    required String content,
+    int? imageId,
+
+    String? dorm_type,
+    String? mbti_ie,
+    String? mbti_ns,
+    String? mbti_ft,
+    String? mbti_jp,
+    String? birth_year,
+    String? enrollment_year,
+    String? sleep_start,
+    String? sleep_end,
+    String? smoking,
+    String? bug,
+    String? shower_style,
+    String? shower_duration,
+    String? sleep_sensitivity,
+    String? home_visit_cycle,
+    String? sleep_habits,
+    String? game,
+    String? cleanliness,
+    String? discord,
+    String? invite_friends,
+  }) async {
+    final body = {
+      'title': title,
+      'content': content,
+      'imageId': imageId,
+
+      'dorm_type': dorm_type,
+      'mbti_ie': mbti_ie,
+      'mbti_ns': mbti_ns,
+      'mbti_ft': mbti_ft,
+      'mbti_jp': mbti_jp,
+      'birth_year': birth_year,
+      'enrollment_year': enrollment_year,
+      'sleep_start': sleep_start,
+      'sleep_end': sleep_end,
+      'smoking': smoking,
+      'bug': bug,
+      'shower_style': shower_style,
+      'shower_duration': shower_duration,
+      'sleep_sensitivity': sleep_sensitivity,
+      'home_visit_cycle': home_visit_cycle,
+      'sleep_habits': sleep_habits,
+      'game': game,
+      'cleanliness': cleanliness,
+      'discord': discord,
+      'invite_friends': invite_friends,
+    };
+
+    return await post('/posts', body);
   }
 
   // 게시글 삭제
