@@ -134,7 +134,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               label: "프로필 수정",
                               secondaryColor: secondaryColor,
                               backgroundColor: backgroundColor,
-                              onTap: () => const ProfileEditScreen(),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ProfileEditScreen(),
+                                  ),  
+                                );
+                              },
                             ),
                           ),
                           const SizedBox(width: 16),
@@ -144,7 +151,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               label: "내가 쓴 글 관리",
                               secondaryColor: secondaryColor,
                               backgroundColor: backgroundColor,
-                              onTap: () => MyPostsScreen(user: widget.user),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MyPostsScreen(user: widget.user),
+                                  ),  
+                                );
+                              },
                             ),
                           ),
                         ],
