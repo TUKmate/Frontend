@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/auth_controller.dart';
-import '../models/post.dart';
-import '../services/api_service.dart';
+import '../models/user.dart';
 import 'my_posts_screen.dart';
 import 'profile_edit_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  final User user;
+
+  const ProfileScreen({super.key, required this.user});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -16,32 +17,8 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final _authController = Get.find<AuthController>();
-  final _api = Get.find<ApiService>();
 
-  List<Post> _myPosts = []; // 내가 쓴 글 목록
-  bool _isLoading = true; // 로딩 상태
 
-  @override
-  void initState() {
-    super.initState();
-    _loadData(); // 화면 진입시 데이터 로드
-  }
-
-  Future<void> _loadData() async {
-    setState(() => _isLoading = true);
-
-    try {
-      // 서버에서 내 게시글 목록 가져오기
-      final postsData = await _api.getMyPosts();
-      _myPosts = postsData.map((json) => Post.fromJson(json)).toList();
-    } catch (e) {
-      Get.snackbar('오류', '데이터 로드 실패');
-    }
-
-    setState(() => _isLoading = false);
-  }
-
-  @override
   Widget build(BuildContext context) {
     final user = _authController.user.value;
     // ✅ 개발 단계용 더미 유저
@@ -167,7 +144,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               label: "내가 쓴 글 관리",
                               secondaryColor: secondaryColor,
                               backgroundColor: backgroundColor,
-                              onTap: () => const MyPostsScreen(),
+                              onTap: () => MyPostsScreen(user: widget.user),
                             ),
                           ),
                         ],
@@ -223,7 +200,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       flex: 65,
                                       child: _buildInfoBox(
                                         label: "학과",
-                                        value: user.major,
+                                      value: user?.major ?? "정보 없음",
                                         secondaryColor: secondaryColor,
                                         backgroundColor: backgroundColor,
                                         textMainColor: textMainColor,
@@ -236,7 +213,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 // Row 2: 기숙사 (Full Width)
                                 _buildInfoBox(
                                   label: "기숙사",
-                                  value: user.dorm_type,
+                                  value: user?.dorm_type ?? "정보 없음",
                                   secondaryColor: secondaryColor,
                                   backgroundColor: backgroundColor,
                                   textMainColor: textMainColor,
@@ -250,7 +227,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     Expanded(
                                       child: _buildInfoBox(
                                         label: "성별",
-                                        value: user.sex,
+                                        value: user?.sex ?? "정보 없음",
                                         secondaryColor: secondaryColor,
                                         backgroundColor: backgroundColor,
                                         textMainColor: textMainColor,
@@ -260,7 +237,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     Expanded(
                                       child: _buildInfoBox(
                                         label: "나이",
-                                        value: "${user.age}세",
+                                        value: "${user?.age ?? 0}세",
                                         secondaryColor: secondaryColor,
                                         backgroundColor: backgroundColor,
                                         textMainColor: textMainColor,

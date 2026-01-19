@@ -1,27 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tukmate_flutter/screens/compose_screen.dart';
 import 'package:tukmate_flutter/screens/profile_screen.dart';
+import '../controllers/auth_controller.dart';
+import '../models/user.dart';
 import 'home_screen.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  final User user;
+  const MainScreen({super.key, required this.user});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final _authController = Get.find<AuthController>();
+
   // 현재 선택된 탭 인덱스 (기본값: 0 -> 홈)
   int _selectedIndex = 0;
 
-  // 탭별 화면 리스트
-  // 파일이 없는 화면은 임시로 Center 위젯을 넣어두었습니다.
-  final List<Widget> _screens = [
-    const HomeScreen(),      // 0: 홈
-    const ComposeScreen(), // 1: 글쓰기 (임시)
-    const Center(child: Text("채팅 화면")),   // 2: 채팅 (임시)
-    const ProfileScreen(),
+  late final List<Widget> _screens;
+
+@override
+void initState() {
+  super.initState();
+
+  _screens = [
+    HomeScreen(user: widget.user),
+    const ComposeScreen(),
+    const Center(child: Text("채팅 화면")),
+    ProfileScreen(user: _authController.user.value!),
   ];
+}
 
   void _onItemTapped(int index) {
     setState(() {

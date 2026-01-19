@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tukmate_flutter/models/post.dart';
-
 import '../controllers/post_controller.dart';
+import '../models/user.dart';
 import 'compose_screen.dart';
 import 'home_screen.dart';
 import 'profile_screen.dart';
 
 class MyPostsScreen extends StatelessWidget {
-  MyPostsScreen({super.key});
+  final User user;
+
+  MyPostsScreen({super.key, required this.user});
 
   final PostController postController = Get.find<PostController>();
 
@@ -221,9 +223,9 @@ class MyPostsScreen extends StatelessWidget {
         selectedItemColor: secondaryColor,
         unselectedItemColor: Colors.grey,
         onTap: (index) {
-          if (index == 0) Get.offAll(() => const HomeScreen());
+          if (index == 0) Get.offAll(() => HomeScreen(user: user));
           if (index == 1) Get.to(() => const ComposeScreen());
-          if (index == 3) Get.offAll(() => const ProfileScreen());
+          if (index == 3) Get.offAll(() => ProfileScreen(user: user));
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "홈"),

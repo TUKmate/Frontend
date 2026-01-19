@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'controllers/auth_controller.dart';
 import 'models/post.dart';
 import 'models/user.dart';
 import 'screens/splash_screen.dart';
@@ -32,8 +33,8 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/', page: () => const SplashScreen()),
         GetPage(name: '/login', page: () => const LoginScreen()),
         GetPage(name: '/register', page: () => const RegisterScreen()),
-        GetPage(name: '/home', page: () => const HomeScreen()),
-        GetPage(name: '/profile', page: () => const ProfileScreen()),
+        GetPage(name: '/home', page: () => HomeScreen(user: Get.find<AuthController>().user.value!)),
+        GetPage(name: '/profile', page: () => ProfileScreen(user: Get.find<AuthController>().user.value!)),
         GetPage(name: '/profile_edit', page: () => const ProfileEditScreen()),
         GetPage(name: '/compose', page: () => const ComposeScreen()),
         GetPage(name: '/post', page: () {
@@ -47,7 +48,7 @@ class MyApp extends StatelessWidget {
           return PostEditScreen(postId: postId);
         }),
         GetPage(name: '/bookmark', page: () => const BookmarkScreen()),
-        GetPage(name: '/my_posts', page: () => MyPostsScreen()),
+        GetPage(name: '/my_posts', page: () => MyPostsScreen(user: Get.find<AuthController>().user.value!)),
       ],
     );
   }
