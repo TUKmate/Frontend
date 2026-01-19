@@ -13,6 +13,23 @@ class AuthController extends GetxController {
   final RxBool isLoading = false.obs; // 로딩- 중인지
   final RxString error = ''.obs; // 에러 메시지
 
+  @override
+  void onInit() {
+    super.onInit();
+    // 임시 테스트용 유저 세팅
+    user.value = User(
+      id: 1,
+      username: "yumin",
+      nickname: "유민",
+      major: "컴퓨터공학과",
+      dorm_type: "1기숙사",
+      sex: "여",
+      age: 21,
+      profileImage: "0",
+      createdAt: DateTime.now(),
+    );
+  }
+
   // 로그인 여부 확인
   bool get isLoggedIn => user.value != null;
 

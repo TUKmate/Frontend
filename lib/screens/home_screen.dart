@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../controllers/auth_controller.dart';
 import '../controllers/post_controller.dart';
+import '../models/user.dart';
 import '../widgets/post_card.dart';
 import '../widgets/filter_chip.dart'; // 파일명이 custom_filter_chip.dart라면 수정 필요
 import 'profile_screen.dart'; // 프로필 화면 임포트
 import 'compose_screen.dart'; // 글쓰기 화면 임포트
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final User user;
+
+  const HomeScreen({super.key, required this.user});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -40,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
           _buildHomeTab(), // 0번 탭: 기존 홈 화면 내용
           const ComposeScreen(), // 1번 탭
           const Center(child: Text("채팅 화면")),   // 2번 탭
-          const ProfileScreen(), // 3번 탭: 마이페이지
+          ProfileScreen(user: Get.find<AuthController>().user.value!), // 3번 탭: 마이페이지
         ],
       ),
 
