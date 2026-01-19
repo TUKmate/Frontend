@@ -1,5 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import '../models/user.dart';
+import '../models/post.dart';
 
 class PostScreen extends StatelessWidget {
   const PostScreen({super.key});
@@ -77,7 +79,7 @@ class PostScreen extends StatelessWidget {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(24),
                                   image: const DecorationImage(
-                                    image: NetworkImage("https://i.pravatar.cc/150?img=3"),
+                                    image: user.profileImage,
                                     fit: BoxFit.cover,
                                   ),
                                   border: Border.all(color: Colors.white, width: 3),
@@ -123,7 +125,7 @@ class PostScreen extends StatelessWidget {
                                 Row(
                                   children: [
                                     Text(
-                                      "컴공이",
+                                      user.nickname,
                                       style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
@@ -139,7 +141,7 @@ class PostScreen extends StatelessWidget {
                                         border: Border.all(color: accentColor.withValues(alpha: 0.2)),
                                       ),
                                       child: Text(
-                                        "DORM A",
+                                        user.dormitory,
                                         style: TextStyle(
                                           fontSize: 11,
                                           fontWeight: FontWeight.bold,
@@ -151,7 +153,7 @@ class PostScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  "컴퓨터공학과 · 작성일 2023.10.23",
+                                  "${user.major} · 작성일 ${post.createdAt}",
                                   style: TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w500,
@@ -342,74 +344,6 @@ class PostScreen extends StatelessWidget {
                                 color: Color(0xFF475569), // text-slate-600
                                 height: 1.8,
                                 letterSpacing: 0.2,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      // 기숙사 위치 이미지 카드
-                      Container(
-                        height: 160,
-                        margin: const EdgeInsets.only(bottom: 40),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(32),
-                          image: const DecorationImage(
-                            image: NetworkImage("https://i.pravatar.cc/150?img=4"), // 임시 이미지
-                            fit: BoxFit.cover,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.05),
-                              blurRadius: 20,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: Stack(
-                          children: [
-                            Positioned(
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                padding: const EdgeInsets.all(20),
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.vertical(bottom: Radius.circular(32)),
-                                  gradient: LinearGradient(
-                                    begin: Alignment.bottomCenter,
-                                    end: Alignment.topCenter,
-                                    colors: [
-                                      Colors.black.withValues(alpha: 0.4),
-                                      Colors.transparent,
-                                    ],
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white.withValues(alpha: 0.95),
-                                        borderRadius: BorderRadius.circular(16),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Icon(Icons.location_on, color: secondaryColor, size: 20),
-                                          const SizedBox(width: 8),
-                                          const Text(
-                                            "기숙사 A동 (남자)",
-                                            style: TextStyle(
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.bold,
-                                              color: Color(0xFF1E293B),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
                               ),
                             ),
                           ],

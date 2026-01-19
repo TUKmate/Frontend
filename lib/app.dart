@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       title: 'TUKmate',
       debugShowCheckedModeBanner: false,
       theme: _buildTheme(),
-      initialRoute: '/compose',
+      initialRoute: '/post',
       getPages: [
         GetPage(name: '/', page: () => const SplashScreen()),
         GetPage(name: '/login', page: () => const LoginScreen()),
@@ -36,10 +36,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/post', page: () => const PostScreen()),
         GetPage(name: '/post_edit', page: () => const PostEditScreen()),
         GetPage(name: '/bookmark', page: () => const BookmarkScreen()),
-        GetPage(
-          name: '/bookmark_empty',
-          page: () => const BookmarkEmptyScreen(),
-        ),
+        GetPage(name: '/bookmark_empty', page: () => const BookmarkEmptyScreen()),
         GetPage(name: '/my_posts', page: () => const MyPostsScreen()),
       ],
     );
