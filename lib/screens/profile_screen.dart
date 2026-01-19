@@ -236,7 +236,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 // Row 2: 기숙사 (Full Width)
                                 _buildInfoBox(
                                   label: "기숙사",
-                                  value: user.dormitory,
+                                  value: user.dorm_type,
                                   secondaryColor: secondaryColor,
                                   backgroundColor: backgroundColor,
                                   textMainColor: textMainColor,
@@ -250,7 +250,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     Expanded(
                                       child: _buildInfoBox(
                                         label: "성별",
-                                        value: user.gender,
+                                        value: user.sex,
                                         secondaryColor: secondaryColor,
                                         backgroundColor: backgroundColor,
                                         textMainColor: textMainColor,

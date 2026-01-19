@@ -141,7 +141,7 @@ class PostScreen extends StatelessWidget {
                                         border: Border.all(color: accentColor.withValues(alpha: 0.2)),
                                       ),
                                       child: Text(
-                                        user.dormitory,
+                                        user.dorm_type,
                                         style: TextStyle(
                                           fontSize: 11,
                                           fontWeight: FontWeight.bold,
