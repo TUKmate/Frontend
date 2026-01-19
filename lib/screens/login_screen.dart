@@ -15,13 +15,13 @@ class _LoginScreenState extends State<LoginScreen> {
   final _authController = Get.find<AuthController>();
 
   // 입력창 컨트롤러
-  final _idController = TextEditingController();
+  final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
   // 로그인 버튼 눌렀을 때
   Future<void> _login() async {
     final success = await _authController.login(
-      id: _idController.text.trim(),
+      username: _usernameController.text.trim(),
       password: _passwordController.text,
     );
 
@@ -34,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void dispose() {
-    _idController.dispose();
+    _usernameController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -117,7 +117,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         decoration: BoxDecoration(
                           color: surfaceColor.withValues(alpha: 0.9),
                           borderRadius: BorderRadius.circular(24),
-                          border: Border.all(color: Colors.white.withValues(alpha: 0.5)),
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.5),
+                          ),
                           boxShadow: [
                             BoxShadow(
                               color: primaryColor.withValues(alpha: 0.1),
@@ -138,16 +140,21 @@ class _LoginScreenState extends State<LoginScreen> {
                               margin: const EdgeInsets.only(bottom: 24),
                               decoration: BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.circular(24), // 둥근 모서리 조정
+                                borderRadius: BorderRadius.circular(
+                                  24,
+                                ), // 둥근 모서리 조정
                                 boxShadow: [
                                   BoxShadow(
-                                    color: secondaryColor.withValues(alpha: 0.15),
+                                    color: secondaryColor.withValues(
+                                      alpha: 0.15,
+                                    ),
                                     blurRadius: 20,
                                     offset: const Offset(0, 8),
                                   ),
                                 ],
                               ),
-                              child: Stack( // 스플래시 화면과 동일한 스타일 적용
+                              child: Stack(
+                                // 스플래시 화면과 동일한 스타일 적용
                                 alignment: Alignment.center,
                                 children: [
                                   // 로고 이미지
@@ -160,7 +167,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                       fit: BoxFit.cover,
                                     ),
                                   ),
-                                  
                                 ],
                               ),
                             ),
@@ -199,7 +205,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                             // 2. 입력 폼 (controller 연결)
                             _buildInputField(
-                              controller: _idController, // controller 추가
+                              controller: _usernameController, // controller 추가
                               label: "아이디",
                               hintText: "아이디 입력",
                               icon: Icons.person_outline,
@@ -221,27 +227,36 @@ class _LoginScreenState extends State<LoginScreen> {
                             SizedBox(
                               width: double.infinity,
                               height: 56,
-                              child: Obx(() => ElevatedButton( // Obx로 로딩 상태 반영
-                                onPressed: _authController.isLoading.value ? null : _login,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: primaryColor,
-                                  foregroundColor: Colors.white,
-                                  elevation: 4,
-                                  shadowColor: primaryColor.withValues(alpha: 0.4),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16),
+                              child: Obx(
+                                () => ElevatedButton(
+                                  // Obx로 로딩 상태 반영
+                                  onPressed: _authController.isLoading.value
+                                      ? null
+                                      : _login,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: primaryColor,
+                                    foregroundColor: Colors.white,
+                                    elevation: 4,
+                                    shadowColor: primaryColor.withValues(
+                                      alpha: 0.4,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
                                   ),
-                                ),
-                                child: _authController.isLoading.value
-                                    ? const CircularProgressIndicator(color: Colors.white)
-                                    : const Text(
-                                        "로그인",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
+                                  child: _authController.isLoading.value
+                                      ? const CircularProgressIndicator(
+                                          color: Colors.white,
+                                        )
+                                      : const Text(
+                                          "로그인",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
-                              )),
+                                ),
+                              ),
                             ),
 
                             const SizedBox(height: 32),
@@ -329,13 +344,15 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         Container(
-          decoration: BoxDecoration(boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.02),
-              blurRadius: 10,
-              offset: const Offset(0, 2),
-            )
-          ]),
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.02),
+                blurRadius: 10,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
           child: TextField(
             controller: controller, // controller 연결
             obscureText: obscureText,
@@ -344,8 +361,14 @@ class _LoginScreenState extends State<LoginScreen> {
               filled: true,
               fillColor: const Color(0xFFF8FAFC),
               hintText: hintText,
-              hintStyle: const TextStyle(color: Color(0xFF94A3B8), fontSize: 14),
-              contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+              hintStyle: const TextStyle(
+                color: Color(0xFF94A3B8),
+                fontSize: 14,
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                vertical: 18,
+                horizontal: 16,
+              ),
               prefixIcon: Icon(icon, color: const Color(0xFF94A3B8), size: 20),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),

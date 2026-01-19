@@ -12,19 +12,36 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   // AuthController 인스턴스 가져오기
   final _authController = Get.find<AuthController>();
-  
+
   // 입력 컨트롤러 생성
-  final _nameController = TextEditingController();
-  final _usernameController = TextEditingController();  
-  final _idController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
+  late final TextEditingController _nameController;
+  late final TextEditingController _usernameController;
+  late final TextEditingController _passwordController;
+  late final TextEditingController _confirmPasswordController;
 
   // 비밀번호 가리기/보이기 상태 관리
   bool _isPasswordVisible = false;
 
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController();
+    _usernameController = TextEditingController();
+    _passwordController = TextEditingController();
+    _confirmPasswordController = TextEditingController();
+    print('RegisterScreen initState: Controllers initialized');
+  }
+
   // 회원가입 로직 함수
   Future<void> _register() async {
+    // Debug: 입력값 확인
+    print('DEBUG: _usernameController.text = ${_usernameController.text}');
+    print('DEBUG: _passwordController.text = ${_passwordController.text}');
+    print(
+      'DEBUG: _confirmPasswordController.text = ${_confirmPasswordController.text}',
+    );
+    print('DEBUG: _nameController.text = ${_nameController.text}');
+
     // 1. 비밀번호 확인
     if (_passwordController.text != _confirmPasswordController.text) {
       Get.snackbar('오류', '비밀번호가 일치하지 않습니다.');
@@ -33,16 +50,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     // 2. 컨트롤러 함수 호출
     final success = await _authController.register(
-      // 이메일 필드가 디자인에 없다면 임시값이나 별도 로직 필요
-      id: _idController.text.isNotEmpty ? _idController.text.trim() : "temp@example.com", 
+      username: _usernameController.text.trim(),
       password: _passwordController.text,
-      name: _nameController.text.trim(),     // 닉네임 필드를 이름으로 사용
-      username: _usernameController.text.trim(), // 아이디
+      passwordConfirm: _confirmPasswordController.text,
+      nickname: _nameController.text.trim(),
     );
 
     if (success) {
       Get.offAllNamed('/login'); // 성공 시 로그인 화면으로 이동
     } else {
+      print(success);
       Get.snackbar('회원가입 실패', _authController.error.value);
     }
   }
@@ -51,12 +68,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void dispose() {
     _nameController.dispose();
     _usernameController.dispose();
-    _idController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +91,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
         elevation: 0,
         scrolledUnderElevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: primaryColor, size: 24),
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: primaryColor,
+            size: 24,
+          ),
           onPressed: () => Navigator.pop(context),
           style: IconButton.styleFrom(
             backgroundColor: Colors.transparent,
@@ -105,11 +124,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 // 상단 칩 (TUK mate)
                 Container(
                   margin: const EdgeInsets.only(bottom: 12),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: accentColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(100),
-                    border: Border.all(color: accentColor.withValues(alpha: 0.2)),
+                    border: Border.all(
+                      color: accentColor.withValues(alpha: 0.2),
+                    ),
                   ),
                   child: const Text(
                     "TUK mate",
@@ -143,7 +167,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 const SizedBox(height: 12),
-                
+
                 // 서브 타이틀
                 const Text(
                   "안전하고 즐거운 룸메이트 생활을 위해\n사용하실 아이디와 비밀번호를 설정해주세요.",
@@ -157,7 +181,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 32),
 
                 // --- 폼 필드 시작 ---
-                
+
                 // 1. 아이디 입력
                 _buildLabel("아이디"),
                 const SizedBox(height: 10),
@@ -165,6 +189,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   children: [
                     Expanded(
                       child: _buildTextField(
+                        controller: _usernameController,
                         hintText: "아이디 입력",
                         secondaryColor: secondaryColor,
                       ),
@@ -182,13 +207,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
-                            side: BorderSide(color: secondaryColor.withValues(alpha: 0.2)),
+                            side: BorderSide(
+                              color: secondaryColor.withValues(alpha: 0.2),
+                            ),
                           ),
-                          shadowColor: const Color(0xFF1758A8).withValues(alpha: 0.04),
+                          shadowColor: const Color(
+                            0xFF1758A8,
+                          ).withValues(alpha: 0.04),
                         ),
                         child: const Text(
                           "중복 확인",
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -208,12 +240,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 _buildLabel("비밀번호"),
                 const SizedBox(height: 10),
                 _buildTextField(
+                  controller: _passwordController,
                   hintText: "영문, 숫자, 특수문자 포함 8-20자",
                   obscureText: !_isPasswordVisible,
                   secondaryColor: secondaryColor,
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                      _isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
                       color: Colors.grey[400],
                       size: 22,
                     ),
@@ -231,11 +266,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 _buildLabel("비밀번호 확인"),
                 const SizedBox(height: 10),
                 _buildTextField(
+                  controller: _confirmPasswordController,
                   hintText: "비밀번호 재입력",
                   obscureText: true,
                   secondaryColor: secondaryColor,
                   // 일치 시 체크 아이콘 표시 (예시)
-                  suffixIcon: const Icon(Icons.check_circle, color: accentColor, size: 22),
+                  suffixIcon: const Icon(
+                    Icons.check_circle,
+                    color: accentColor,
+                    size: 22,
+                  ),
                 ),
 
                 const SizedBox(height: 24),
@@ -244,6 +284,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 _buildLabel("닉네임"),
                 const SizedBox(height: 10),
                 _buildTextField(
+                  controller: _nameController,
                   hintText: "다른 학우들에게 보여질 이름",
                   secondaryColor: secondaryColor,
                 ),
@@ -330,6 +371,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   // 텍스트 필드 위젯 헬퍼
   Widget _buildTextField({
+    required TextEditingController controller,
     required String hintText,
     required Color secondaryColor,
     bool obscureText = false,
@@ -349,12 +391,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ],
       ),
       child: TextField(
+        controller: controller,
         obscureText: obscureText,
         style: const TextStyle(fontSize: 15, color: Color(0xFF111418)),
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 18,
+          ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
             borderSide: BorderSide.none,

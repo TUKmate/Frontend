@@ -6,7 +6,7 @@ import 'screens/register_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/profile_edit_screen.dart';
-import 'screens/compose_screen.dart'; 
+import 'screens/compose_screen.dart';
 import 'screens/main_screen.dart';
 import 'screens/post_screen.dart';
 import 'screens/bookmark_screen.dart';
@@ -15,7 +15,7 @@ import 'screens/post_edit_screen.dart';
 import 'screens/my_posts_screen.dart';
 
 class MyApp extends StatelessWidget {
-  const MyApp ({super.key});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       title: 'TUKmate',
       debugShowCheckedModeBanner: false,
       theme: _buildTheme(),
-      initialRoute: '/compose',
+      initialRoute: '/login',
       getPages: [
         GetPage(name: '/', page: () => const SplashScreen()),
         GetPage(name: '/login', page: () => const LoginScreen()),
@@ -36,7 +36,10 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/post', page: () => const PostScreen()),
         GetPage(name: '/post_edit', page: () => const PostEditScreen()),
         GetPage(name: '/bookmark', page: () => const BookmarkScreen()),
-        GetPage(name: '/bookmark_empty', page: () => const BookmarkEmptyScreen()),
+        GetPage(
+          name: '/bookmark_empty',
+          page: () => const BookmarkEmptyScreen(),
+        ),
         GetPage(name: '/my_posts', page: () => const MyPostsScreen()),
       ],
     );

@@ -22,7 +22,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    _loadData();  // 화면 진입시 데이터 로드
+    _loadData(); // 화면 진입시 데이터 로드
   }
 
   Future<void> _loadData() async {
@@ -38,10 +38,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     setState(() => _isLoading = false);
   }
-  
+
   @override
   Widget build(BuildContext context) {
-
     final user = _authController.user.value;
     if (user == null) return const SizedBox(); // 유저 정보 없으면 빈 화면
 
@@ -98,7 +97,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                             IconButton(
                               onPressed: () {},
-                              icon: const Icon(Icons.notifications_outlined, color: Colors.white),
+                              icon: const Icon(
+                                Icons.notifications_outlined,
+                                color: Colors.white,
+                              ),
                               style: IconButton.styleFrom(
                                 visualDensity: VisualDensity.compact,
                               ),
@@ -119,7 +121,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ),
                             const SizedBox(height: 8),
-                            Text(user.username,
+                            Text(
+                              user.username,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 30,
@@ -184,7 +187,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             // 섹션 타이틀
                             Row(
                               children: [
-                                Icon(Icons.badge_outlined, color: secondaryColor, size: 24),
+                                Icon(
+                                  Icons.badge_outlined,
+                                  color: secondaryColor,
+                                  size: 24,
+                                ),
                                 const SizedBox(width: 8),
                                 const Text(
                                   "기본 정보",
@@ -197,7 +204,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ],
                             ),
                             const SizedBox(height: 20),
-                            
+
                             // 정보 그리드
                             Column(
                               children: [
@@ -228,7 +235,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ],
                                 ),
                                 const SizedBox(height: 12),
-                                
+
                                 // Row 2: 기숙사 (Full Width)
                                 _buildInfoBox(
                                   label: "기숙사",
@@ -315,7 +322,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           color: primaryColor.withValues(alpha: 0.4),
                         ),
                       ),
-                      
+
                       const SizedBox(height: 40), // 하단 여백 (네비게이션 바 고려)
                     ],
                   ),
@@ -423,11 +430,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ],
           ),
           if (icon != null)
-            Icon(
-              icon,
-              color: secondaryColor.withValues(alpha: 0.3),
-              size: 24,
-            ),
+            Icon(icon, color: secondaryColor.withValues(alpha: 0.3), size: 24),
         ],
       ),
     );

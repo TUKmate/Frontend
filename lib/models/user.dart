@@ -1,14 +1,14 @@
 class User {
   final int id;
-  final String name;
+  final String nickname;
   final String username;
-  final String? profileImage;   // null일 수도 있어서 ? 넣음
+  final String? profileImage; // null일 수도 있어서 ? 넣음
   final DateTime createdAt;
 
   // 생성자
   User({
     required this.id,
-    required this.name,
+    required this.nickname,
     required this.username,
     this.profileImage,
     required this.createdAt,
@@ -18,9 +18,9 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'],
-      name: json['name'],
+      nickname: json['nickname'],
       username: json['username'],
-      profileImage: json['profile_image'],
+      profileImage: json['profile_image_id'],
       createdAt: DateTime.parse(json['created_at']),
     );
   }

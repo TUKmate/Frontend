@@ -2,9 +2,9 @@ import 'package:get/get.dart';
 
 ///
 /// api 통신을 하기위한 기본 클래스
-/// 
+///
 class ApiService extends GetConnect {
-  String? _token;  // 통신에 사용할 인증 Token 저장
+  String? _token; // 통신에 사용할 인증 Token 저장
 
   @override
   void onInit() {
@@ -20,13 +20,13 @@ class ApiService extends GetConnect {
       return request;
     });
 
-    super.onInit();  // 부모(GetConnect)의 초기화도 반드시 실행
+    super.onInit(); // 부모(GetConnect)의 초기화도 반드시 실행
   }
 
   // 로그인 성공시 토큰 저장
   void setToken(String? token) {
     _token = token;
- }
+  }
 
   // 로그아웃시 토큰 삭제
   void clearToken() {
@@ -35,55 +35,55 @@ class ApiService extends GetConnect {
 
   // 회원가입
   Future<Response> register({
-    required String id,
-    required String password,
-    required String name,
     required String username,
+    required String password,
+    required String passwordConfirm,
+    required String nickname,
   }) async {
     return await post('/auth/register', {
-      'id' : id,
-      'password' : password,
-      'name' : name,
-      'username' : username,
+      'username': username,
+      'password': password,
+      'passwordConfirm': passwordConfirm,
+      'nickname': nickname,
     });
   }
 
   // 로그인
   Future<Map<String, dynamic>?> login({
-    required String id,
+    required String username,
     required String password,
   }) async {
     final res = await post('/auth/login', {
-      'id' : id,
-      'password' : password,
+      'username': username,
+      'password': password,
     });
     print('Login Response: ${res.bodyString}'); // 디버그용 출력
 
     if (res.statusCode == 200) {
       final token = res.body['token'];
-      setToken(token);  // 토큰 저장 (이후 요청에 자동 첨부됨)
+      setToken(token); // 토큰 저장 (이후 요청에 자동 첨부됨)
 
-      return res.body['user'];  // 유저 정보 반환
+      return res.body['user']; // 유저 정보 반환
     }
-    return null;  // 로그인 실패
+    return null; // 로그인 실패
   }
 
   // 내 프로필 조회
   Future<Map<String, dynamic>?> getMyProfile() async {
-  final res = await get('/users/me');
-  if (res.statusCode == 200) {
-    return res.body['data'];  // 유저 정보 반환
-  }
-  return null;
+    final res = await get('/users/me');
+    if (res.statusCode == 200) {
+      return res.body['data']; // 유저 정보 반환
+    }
+    return null;
   }
 
   // 내가 쓴 트윗 목록
   Future<List<dynamic>> getMyPosts() async {
-  final res = await get('/users/me/posts');
-  if (res.statusCode == 200) {
-    return res.body['data'] ?? [];
-  }
-  return [];
+    final res = await get('/users/me/posts');
+    if (res.statusCode == 200) {
+      return res.body['data'] ?? [];
+    }
+    return [];
   }
 
   // 타임라인 조회 : 모든 게시글 가져오기
@@ -97,10 +97,7 @@ class ApiService extends GetConnect {
 
   // 게시글 작성
   Future<Response> createPost(String content, String? imagePath) async {
-    return await post('/posts', {
-      'content': content,
-      'image': imagePath,
-    });
+    return await post('/posts', {'content': content, 'image': imagePath});
   }
 
   // 게시글 삭제
@@ -122,7 +119,7 @@ class ApiService extends GetConnect {
   Future<Map<String, dynamic>?> getProfile(int userId) async {
     final res = await get('/users/me');
     if (res.statusCode == 200) {
-      return res.body['data'];  // 유저 정보 반환
+      return res.body['data']; // 유저 정보 반환
     }
     return null;
   }
