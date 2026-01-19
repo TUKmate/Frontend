@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-// 각 화면 임포트 (파일 경로에 맞게 수정하세요)
+import 'package:tukmate_flutter/screens/compose_screen.dart';
+import 'package:tukmate_flutter/screens/profile_screen.dart';
 import 'home_screen.dart';
-// import 'write_screen.dart'; // 글쓰기 화면 파일이 있다면 주석 해제
-// import 'chat_screen.dart';  // 채팅 화면 파일이 있다면 주석 해제
-// import 'profile_screen.dart'; // 마이페이지 화면 파일이 있다면 주석 해제
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -20,10 +18,9 @@ class _MainScreenState extends State<MainScreen> {
   // 파일이 없는 화면은 임시로 Center 위젯을 넣어두었습니다.
   final List<Widget> _screens = [
     const HomeScreen(),      // 0: 홈
-    const Center(child: Text("글쓰기 화면")), // 1: 글쓰기 (임시)
+    const ComposeScreen(), // 1: 글쓰기 (임시)
     const Center(child: Text("채팅 화면")),   // 2: 채팅 (임시)
-    const Center(child: Text("마이페이지 화면")), // 3: 마이페이지 (임시)
-    // const ProfileScreen(), // 파일이 있다면 위 줄을 지우고 이 줄의 주석을 해제하세요.
+    const ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -34,12 +31,9 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // 색상 정의 (HTML 디자인과 동일하게 맞춤)
     const Color secondaryColor = Color(0xFF068FD3);
 
     return Scaffold(
-      // body: 현재 선택된 인덱스의 화면을 보여줌
-      // IndexedStack을 사용하면 탭 전환 시 화면 상태(스크롤 위치 등)가 유지됩니다.
       body: IndexedStack(
         index: _selectedIndex,
         children: _screens,
@@ -80,10 +74,6 @@ class _MainScreenState extends State<MainScreen> {
   // 하단 네비게이션 아이템 빌더 (HTML의 <button> 부분 구현)
   Widget _buildBottomNavItem(IconData icon, String label, int index, Color activeColor) {
     final bool isSelected = _selectedIndex == index;
-    
-    // HTML 디자인 참고:
-    // 선택됨: text-secondary, filled icon, font-bold
-    // 선택안됨: text-gray-400, font-medium
     
     return Expanded(
       child: GestureDetector(

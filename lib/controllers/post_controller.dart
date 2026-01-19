@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import '../models/post.dart';
 import '../services/api_service.dart';
+import 'auth_controller.dart';
 
 class PostController extends GetxController {
   final _api = Get.find<ApiService>();
@@ -139,4 +140,14 @@ class PostController extends GetxController {
       Get.snackbar('오류', '북마크 실패');
     }
   }
+
+  // 내가 쓴 글만 가져오기
+  List<Post> get myPosts {
+    final user = Get.find<AuthController>().user.value;
+    if (user == null) return [];
+    
+    return posts
+        .where((post) => post.userId == user.id)
+        .toList();
+}
 }
