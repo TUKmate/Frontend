@@ -35,9 +35,12 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/profile_edit', page: () => const ProfileEditScreen()),
         GetPage(name: '/compose', page: () => const ComposeScreen()),
         GetPage(name: '/post', page: () => const PostScreen()),
-        GetPage(name: '/post_edit', page: () => const PostEditScreen()),
+        GetPage(name: '/post_edit', page: () {
+          final postId = Get.arguments as int;
+          return PostEditScreen(postId: postId);
+        }),
         GetPage(name: '/bookmark', page: () => const BookmarkScreen()),
-        GetPage(name: '/my_posts', page: () => const MyPostsScreen()),
+        GetPage(name: '/my_posts', page: () => MyPostsScreen()),
       ],
     );
   }

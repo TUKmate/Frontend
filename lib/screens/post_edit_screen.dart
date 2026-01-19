@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class PostEditScreen extends StatefulWidget {
-  const PostEditScreen({super.key});
+  final int postId;
+  const PostEditScreen({super.key, required this.postId});
 
   @override
   State<PostEditScreen> createState() => _PostEditScreenState();
