@@ -5,8 +5,8 @@ import '../controllers/post_controller.dart';
 import '../models/user.dart';
 import '../widgets/post_card.dart';
 import '../widgets/filter_chip.dart'; // 파일명이 custom_filter_chip.dart라면 수정 필요
-import 'profile_screen.dart'; // 프로필 화면 임포트
-import 'compose_screen.dart'; // 글쓰기 화면 임포트
+import 'profile_screen.dart';
+import 'compose_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final User user;
@@ -18,13 +18,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // 1. 하단바 탭 상태 관리
   int _selectedIndex = 0;
-
-  // 2. 홈 화면 필터 상태 관리
   String _selectedFilter = "전체";
 
-  // 탭 변경 함수
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -33,29 +29,25 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // 공통 색상 정의
     const Color secondaryColor = Color(0xFF068FD3);
 
     return Scaffold(
-      // [핵심] body를 IndexedStack으로 감싸서 탭 전환 구현
       body: IndexedStack(
         index: _selectedIndex,
         children: [
-          _buildHomeTab(), // 0번 탭: 기존 홈 화면 내용
-          const ComposeScreen(), // 1번 탭
-          const Center(child: Text("채팅 화면")),   // 2번 탭
-          ProfileScreen(user: Get.find<AuthController>().user.value!), // 3번 탭: 마이페이지
+          _buildHomeTab(),
+          const ComposeScreen(),
+          const Center(child: Text("채팅 화면")),
+          ProfileScreen(user: Get.find<AuthController>().user.value!),
         ],
       ),
-
-      // 하단 네비게이션 바
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.95),
+          color: const Color(0xFFFFFFFF).withValues(alpha: 0.95),
           borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.02),
+              color: const Color(0xFF000000).withValues(alpha: 0.02),
               blurRadius: 20,
               offset: const Offset(0, -5),
             ),
@@ -80,9 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // --- [1] 기존 홈 화면 내용을 별도 위젯 함수로 분리 ---
   Widget _buildHomeTab() {
-    // 색상 정의
     const Color primaryColor = Color(0xFF1758A8);
     const Color secondaryColor = Color(0xFF068FD3);
     const Color backgroundColor = Color(0xFFF9FCFE);
@@ -90,193 +80,196 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final postController = Get.find<PostController>();
 
-    return Scaffold( // 중첩 Scaffold지만 배경색 등을 위해 유지
-      backgroundColor: backgroundColor,
-      body: RefreshIndicator(
-        onRefresh: () => postController.loadPosts(),
-        color: primaryColor,
-        child: CustomScrollView(
-          slivers: [
-            // 1. Sticky Header
-            SliverAppBar(
-              pinned: true,
-              floating: true,
-              backgroundColor: const Color(0xFFFFFFFF).withValues(alpha: 0.8),
-              elevation: 0,
-              scrolledUnderElevation: 0,
-              automaticallyImplyLeading: false,
-              titleSpacing: 20,
-              title: Row(
-                children: [
-                  Container(
-                    width: 36,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      color: primaryColor,
-                      borderRadius: BorderRadius.circular(14),
-                      boxShadow: [
-                        BoxShadow(
-                          color: primaryColor.withValues(alpha: 0.2),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
+    return Container(
+      color: backgroundColor,
+      child: SafeArea(
+        child: RefreshIndicator(
+          onRefresh: () => postController.loadPosts(),
+          color: primaryColor,
+          child: CustomScrollView(
+            slivers: [
+              // 1. Sticky Header
+              SliverAppBar(
+                pinned: true,
+                floating: true,
+                backgroundColor: const Color(0xFFFFFFFF).withValues(alpha: 0.8),
+                elevation: 0,
+                scrolledUnderElevation: 0,
+                automaticallyImplyLeading: false,
+                titleSpacing: 20,
+                title: Row(
+                  children: [
+                    Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: primaryColor,
+                        borderRadius: BorderRadius.circular(14),
+                        boxShadow: [
+                          BoxShadow(
+                            color: primaryColor.withValues(alpha: 0.2),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: const Icon(Icons.school, color: Colors.white, size: 20),
+                    ),
+                    const SizedBox(width: 10),
+                    const Text(
+                      "TUK mate",
+                      style: TextStyle(
+                        color: primaryColor,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: -0.5,
+                      ),
+                    ),
+                  ],
+                ),
+                actions: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 20),
+                    child: Stack(
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.transparent,
+                          ),
+                          child: const Icon(Icons.notifications_outlined, color: textSubColor),
+                        ),
+                        Positioned(
+                          top: 10,
+                          right: 10,
+                          child: Container(
+                            width: 8,
+                            height: 8,
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white, width: 1.5),
+                            ),
+                          ),
                         ),
                       ],
-                    ),
-                    child: const Icon(Icons.school, color: Colors.white, size: 20),
-                  ),
-                  const SizedBox(width: 10),
-                  const Text(
-                    "TUK mate",
-                    style: TextStyle(
-                      color: primaryColor,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: -0.5,
                     ),
                   ),
                 ],
               ),
-              actions: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: Stack(
-                    children: [
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.transparent,
-                        ),
-                        child: const Icon(Icons.notifications_outlined, color: textSubColor),
-                      ),
-                      Positioned(
-                        top: 10,
-                        right: 10,
-                        child: Container(
-                          width: 8,
-                          height: 8,
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white, width: 1.5),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
 
-            // 2. Sticky Search Bar & Filter
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: _SliverSearchDelegate(
-                minHeight: 120,
-                maxHeight: 120,
-                child: Container(
-                  color: backgroundColor.withValues(alpha: 0.95),
-                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                  child: Column(
-                    children: [
-                      // 검색창
-                      Container(
-                        height: 52,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(
-                              color: secondaryColor.withValues(alpha: 0.08),
-                              blurRadius: 30,
-                              offset: const Offset(0, 8),
-                            )
-                          ],
-                        ),
-                        child: TextField(
-                          decoration: InputDecoration(
-                            hintText: "내 룸메이트 찾기...",
-                            hintStyle: TextStyle(color: Colors.blue[200], fontSize: 15),
-                            prefixIcon: const Icon(Icons.search, color: secondaryColor),
-                            suffixIcon: IconButton(
-                              icon: const Icon(Icons.tune, color: secondaryColor, size: 20),
-                              onPressed: () {},
+              // 2. Sticky Search Bar & Filter
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: _SliverSearchDelegate(
+                  minHeight: 140,
+                  maxHeight: 140,
+                  child: Container(
+                    color: backgroundColor.withValues(alpha: 0.95),
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    child: Column(
+                      children: [
+                        // 검색창
+                        Container(
+                          height: 52,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: secondaryColor.withValues(alpha: 0.08),
+                                blurRadius: 30,
+                                offset: const Offset(0, 8),
+                              )
+                            ],
+                          ),
+                          child: TextField(
+                            decoration: InputDecoration(
+                              hintText: "내 룸메이트 찾기...",
+                              hintStyle: TextStyle(color: Colors.blue[200], fontSize: 15),
+                              prefixIcon: const Icon(Icons.search, color: secondaryColor),
+                              suffixIcon: IconButton(
+                                icon: const Icon(Icons.tune, color: secondaryColor, size: 20),
+                                onPressed: () {},
+                              ),
+                              border: InputBorder.none,
+                              contentPadding: const EdgeInsets.symmetric(vertical: 14),
                             ),
-                            border: InputBorder.none,
-                            contentPadding: const EdgeInsets.symmetric(vertical: 14),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 12),
-                      // 필터 칩
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            _buildCustomChip("전체", primaryColor),
-                            const SizedBox(width: 10),
-                            _buildCustomChip("TIP(1기숙사)", primaryColor),
-                            const SizedBox(width: 10),
-                            _buildCustomChip("2기숙사", primaryColor),
-                          ],
+                        const SizedBox(height: 12),
+                        // 필터 칩
+                        Flexible(
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                _buildCustomChip("전체", primaryColor),
+                                const SizedBox(width: 10),
+                                _buildCustomChip("TIP(1기숙사)", primaryColor),
+                                const SizedBox(width: 10),
+                                _buildCustomChip("2기숙사", primaryColor),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
 
-            // 3. 게시글 리스트
-            Obx(() {
-              if (postController.isLoading.value) {
-                return const SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: Center(child: CircularProgressIndicator()),
-                );
-              }
-              if (postController.posts.isEmpty) {
-                return const SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: Center(child: Text("게시물이 없습니다.")),
-                );
-              }
-              return SliverPadding(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 100),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final post = postController.posts[index];
-                      return PostCard(
-                        post: {
-                          'id': post.id,
-                          'title': post.content,
-                          'content': post.content,
-                          'user': post.name,
-                          'time': post.createdAt,
-                          'isRecruiting': post.isRecruiting,
-                          'isBookmarked': post.isBookmarked,
-                          'tags': post.tags,
-                          'imageIndex': post.profileImage,
-                          'major': post.major,
-                        },
-                        onBookmark: () => postController.toggleBookmark(post.id),
-                        onDelete: () => postController.deletePost(post.id),
-                      );
-                    },
-                    childCount: postController.posts.length,
+              // 3. 게시글 리스트
+              Obx(() {
+                if (postController.isLoading.value) {
+                  return const SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+                if (postController.posts.isEmpty) {
+                  return const SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Center(child: Text("게시물이 없습니다.")),
+                  );
+                }
+                return SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 120),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        final post = postController.posts[index];
+                        return PostCard(
+                          post: {
+                            'id': post.id,
+                            'title': post.content,
+                            'content': post.content,
+                            'user': post.name,
+                            'time': post.createdAt,
+                            'isRecruiting': post.isRecruiting,
+                            'isBookmarked': post.isBookmarked,
+                            'tags': post.tags,
+                            'imageIndex': post.profileImage,
+                            'major': post.major,
+                          },
+                          onBookmark: () => postController.toggleBookmark(post.id),
+                          onDelete: () => postController.deletePost(post.id),
+                        );
+                      },
+                      childCount: postController.posts.length,
+                    ),
                   ),
-                ),
-              );
-            }),
-          ],
+                );
+              }),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  // --- [2] 하단바 아이템 빌더 ---
   Widget _buildBottomNavItem(IconData icon, String label, int index, Color activeColor) {
     final bool isSelected = _selectedIndex == index;
     return Expanded(
@@ -307,7 +300,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // --- [3] 필터 칩 빌더 ---
   Widget _buildCustomChip(String label, Color primaryColor) {
     return CustomFilterChip(
       label: label,
@@ -322,7 +314,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-// --- [4] Sliver Delegate 클래스 ---
 class _SliverSearchDelegate extends SliverPersistentHeaderDelegate {
   final double minHeight;
   final double maxHeight;
