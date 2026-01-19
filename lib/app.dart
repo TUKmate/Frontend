@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       theme: _buildTheme(),
 
 
-      initialRoute: '/',
+      initialRoute: '/home',
 
 
       getPages: [
