@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:tukmate_flutter/controllers/bookmark_controller.dart';
 import '../controllers/auth_controller.dart';
 
 import 'app.dart';
@@ -15,6 +16,7 @@ void main() async {
   Get.put(ApiService());  // 1. API 서비스
   Get.put(AuthController());  // 2. 인증 컨트롤러
   Get.put(PostController()); // 3. 트윗
+  Get.put(BookmarkController()); // 4. 북마크
 
   // 한국어 설정
   timeago.setLocaleMessages('ko', timeago.KoMessages());

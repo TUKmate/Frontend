@@ -7,10 +7,8 @@ import 'screens/home_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/profile_edit_screen.dart';
 import 'screens/compose_screen.dart';
-import 'screens/main_screen.dart';
 import 'screens/post_screen.dart';
 import 'screens/bookmark_screen.dart';
-import 'screens/bookmark_empty_screen.dart';
 import 'screens/post_edit_screen.dart';
 import 'screens/my_posts_screen.dart';
 
@@ -25,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: _buildTheme(),
 
 
-      initialRoute: '/post',
+      initialRoute: '/bookmark',
 
 
       getPages: [
@@ -39,7 +37,6 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/post', page: () => const PostScreen()),
         GetPage(name: '/post_edit', page: () => const PostEditScreen()),
         GetPage(name: '/bookmark', page: () => const BookmarkScreen()),
-        GetPage(name: '/bookmark_empty', page: () => const BookmarkEmptyScreen()),
         GetPage(name: '/my_posts', page: () => const MyPostsScreen()),
       ],
     );
