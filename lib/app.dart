@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'models/post.dart';
+import 'models/user.dart';
 import 'screens/splash_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
@@ -23,7 +25,7 @@ class MyApp extends StatelessWidget {
       theme: _buildTheme(),
 
 
-      initialRoute: '/bookmark',
+      initialRoute: '/',
 
 
       getPages: [
@@ -34,7 +36,12 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/profile', page: () => const ProfileScreen()),
         GetPage(name: '/profile_edit', page: () => const ProfileEditScreen()),
         GetPage(name: '/compose', page: () => const ComposeScreen()),
-        GetPage(name: '/post', page: () => const PostScreen()),
+        GetPage(name: '/post', page: () {
+          final args = Get.arguments as Map<String, dynamic>;
+          final post = args['post'] as Post;
+          final user = args['user'] as User;
+          return PostScreen(post: post, user: user);
+        }),
         GetPage(name: '/post_edit', page: () {
           final postId = Get.arguments as int;
           return PostEditScreen(postId: postId);
