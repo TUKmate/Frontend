@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/post_controller.dart';
 import '../widgets/post_card.dart';
-import '../widgets/filter_chip.dart'; // 만약 파일명이 custom_filter_chip.dart라면 수정 필요
+import '../widgets/filter_chip.dart'; // 파일명이 custom_filter_chip.dart라면 수정 필요
+import 'profile_screen.dart'; // 프로필 화면 임포트
+import 'compose_screen.dart'; // 글쓰기 화면 임포트
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,21 +14,79 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // 필터 선택 상태 (추가됨)
+  // 1. 하단바 탭 상태 관리
+  int _selectedIndex = 0;
+
+  // 2. 홈 화면 필터 상태 관리
   String _selectedFilter = "전체";
+
+  // 탭 변경 함수
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    // 공통 색상 정의
+    const Color secondaryColor = Color(0xFF068FD3);
+
+    return Scaffold(
+      // [핵심] body를 IndexedStack으로 감싸서 탭 전환 구현
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: [
+          _buildHomeTab(), // 0번 탭: 기존 홈 화면 내용
+          const ComposeScreen(), // 1번 탭
+          const Center(child: Text("채팅 화면")),   // 2번 탭
+          const ProfileScreen(), // 3번 탭: 마이페이지
+        ],
+      ),
+
+      // 하단 네비게이션 바
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.95),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.02),
+              blurRadius: 20,
+              offset: const Offset(0, -5),
+            ),
+          ],
+          border: Border(top: BorderSide(color: Colors.blue[50]!)),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildBottomNavItem(Icons.home_filled, "홈", 0, secondaryColor),
+                _buildBottomNavItem(Icons.edit_square, "글쓰기", 1, secondaryColor),
+                _buildBottomNavItem(Icons.chat_bubble, "채팅", 2, secondaryColor),
+                _buildBottomNavItem(Icons.person, "마이페이지", 3, secondaryColor),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // --- [1] 기존 홈 화면 내용을 별도 위젯 함수로 분리 ---
+  Widget _buildHomeTab() {
     // 색상 정의
     const Color primaryColor = Color(0xFF1758A8);
     const Color secondaryColor = Color(0xFF068FD3);
     const Color backgroundColor = Color(0xFFF9FCFE);
     const Color textSubColor = Color(0xFF64748B);
 
-    // PostController 가져오기
     final postController = Get.find<PostController>();
 
-    return Scaffold(
+    return Scaffold( // 중첩 Scaffold지만 배경색 등을 위해 유지
       backgroundColor: backgroundColor,
       body: RefreshIndicator(
         onRefresh: () => postController.loadPosts(),
@@ -145,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      // 필터 칩 (CustomFilterChip 사용)
+                      // 필터 칩
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
@@ -164,47 +224,38 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-            // 3. 게시글 리스트 (Obx 적용)
+            // 3. 게시글 리스트
             Obx(() {
-              // 로딩 중일 때
               if (postController.isLoading.value) {
                 return const SliverFillRemaining(
                   hasScrollBody: false,
                   child: Center(child: CircularProgressIndicator()),
                 );
               }
-
-              // 게시글이 없을 때
               if (postController.posts.isEmpty) {
                 return const SliverFillRemaining(
                   hasScrollBody: false,
                   child: Center(child: Text("게시물이 없습니다.")),
                 );
               }
-
-              // 게시글 리스트 표시
               return SliverPadding(
                 padding: const EdgeInsets.fromLTRB(20, 10, 20, 100),
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
                       final post = postController.posts[index];
-                      
                       return PostCard(
                         post: {
                           'id': post.id,
-                          'title': post.content, // 제목이 없다면 내용 사용
+                          'title': post.content,
                           'content': post.content,
                           'user': post.name,
-                          'time': "방금 전", // 시간 변환 로직 필요 (예: post.createdAt)
-                          // 아래 필드들은 Post 모델에 해당 속성이 있어야 함 (없으면 기본값)
-                          'isRecruiting': true, 
-                          'isNew': false,
+                          'time': post.createdAt,
+                          'isRecruiting': post.isRecruiting,
                           'isBookmarked': post.isBookmarked,
-                          'isVerified': true,
-                          'tags': ["#태그"], // post.tags ?? []
-                          'imageIndex': (index % 10) + 1, // 더미 이미지용
-                          'major': "컴퓨터공학", // post.major
+                          'tags': post.tags,
+                          'imageIndex': post.profileImage,
+                          'major': post.major,
                         },
                         onBookmark: () => postController.toggleBookmark(post.id),
                         onDelete: () => postController.deletePost(post.id),
@@ -221,23 +272,53 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // 칩 생성 헬퍼 함수
+  // --- [2] 하단바 아이템 빌더 ---
+  Widget _buildBottomNavItem(IconData icon, String label, int index, Color activeColor) {
+    final bool isSelected = _selectedIndex == index;
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => _onItemTapped(index),
+        behavior: HitTestBehavior.opaque,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: 26,
+              color: isSelected ? activeColor : Colors.grey[400],
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                color: isSelected ? activeColor : Colors.grey[400],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // --- [3] 필터 칩 빌더 ---
   Widget _buildCustomChip(String label, Color primaryColor) {
-    return CustomFilterChip( // [중요] widgets/filter_chip.dart의 클래스 이름
+    return CustomFilterChip(
       label: label,
       isSelected: _selectedFilter == label,
       primaryColor: primaryColor,
       onTap: () {
         setState(() {
           _selectedFilter = label;
-          // 필터링 로직이 필요하다면 여기에 postController.filter(label) 추가
         });
       },
     );
   }
 }
 
-// Sliver Persistent Header Delegate
+// --- [4] Sliver Delegate 클래스 ---
 class _SliverSearchDelegate extends SliverPersistentHeaderDelegate {
   final double minHeight;
   final double maxHeight;
