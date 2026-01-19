@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:get/get.dart';
 import 'package:tukmate_flutter/services/api_service.dart';
 import '../models/user.dart';

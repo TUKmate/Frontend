@@ -4,7 +4,10 @@ import '../models/user.dart';
 import '../models/post.dart';
 
 class PostScreen extends StatelessWidget {
-  const PostScreen({super.key});
+  final User user;
+  final Post post;
+
+  const PostScreen({super.key, required this.user, required this.post});
 
   @override
   Widget build(BuildContext context) {
@@ -78,8 +81,8 @@ class PostScreen extends StatelessWidget {
                                 height: 72,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(24),
-                                  image: const DecorationImage(
-                                    image: user.profileImage,
+                                  image: DecorationImage(
+                                    image: NetworkImage(user.profileImage!),
                                     fit: BoxFit.cover,
                                   ),
                                   border: Border.all(color: Colors.white, width: 3),

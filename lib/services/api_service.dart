@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:get/get.dart';
 
 ///
@@ -57,6 +59,7 @@ class ApiService extends GetConnect {
       'username': username,
       'password': password,
     });
+    // ignore: avoid_print
     print('Login Response: ${res.bodyString}'); // 디버그용 출력
 
     if (res.statusCode == 200) {

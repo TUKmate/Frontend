@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, avoid_print
+
 import 'package:get/get.dart';
 import '../models/post.dart';
 import '../services/api_service.dart';
